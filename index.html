@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Proxy-Website</title>
+</head>
+<body>
+  <h1>Proxy-Website</h1>
+  <form id="proxyForm">
+    <label for="urlInput">Geben Sie die zu entsperrende URL ein:</label><br>
+    <input type="text" id="urlInput" name="urlInput"><br><br>
+    <button type="submit">Entsperren</button>
+  </form>
+  <div id="result"></div>
+
+  <script>
+    const proxyForm = document.getElementById('proxyForm');
+    const resultDiv = document.getElementById('result');
+
+    proxyForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const url = document.getElementById('urlInput').value;
+
+      try {
+        const response = await fetch('/proxy?url=' + encodeURIComponent(url));
+        const data = await response.text();
+        resultDiv.innerHTML = `<iframe srcdoc="${data}" width="100%" height="500px"></iframe>`;
+      } catch (error) {
+        console.error('Fehler beim Zugriff auf den Proxy:', error);
+        resultDiv.innerHTML = 'Fehler beim Zugriff auf den Proxy.';
+      }
+    });
+  </script>
+</body>
+</html>
